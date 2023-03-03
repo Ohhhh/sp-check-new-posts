@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        String @id @db.VarChar(255)
+  slug      String @db.VarChar(255)
+  title     String @db.Text
+  excerpt   String @db.Text
+  date      String @db.VarChar(255)
+  thumb_url String @db.TinyText
+  content   String @db.LongText
+  tags      String @db.VarChar(255)
+  audience  String @db.VarChar(20)
+}
+
+model Podcast {
+  id        BigInt @id @default(autoincrement())
+  slug      String @db.VarChar(255)
+  title     String @db.Text
+  excerpt   String @db.Text
+  date      Int    @db.UnsignedInt
+  thumb_url String @db.TinyText
+  content   String @default("") @db.LongText
+  audio_url String @db.VarChar(255)
+}
