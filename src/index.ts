@@ -19,6 +19,7 @@ const prisma = new PrismaClient();
 
   // if no exist
   if (postInDB === undefined || postInDB.length === 0) {
+    console.log("Updating DB...");
     // ...add it to the database
     const createPost = await prisma.post.create({
       data: lastPublicatedPost
@@ -26,9 +27,9 @@ const prisma = new PrismaClient();
     console.log("new post created!")
     console.log(createPost);
   } else {
+    console.log("No need to update.");
     console.log("Post in DB")
     console.log("id: ", postInDB[0].id);
-    console.log("title: ", postInDB[0].title);
   }
 
 })();

@@ -15,7 +15,7 @@ export interface RawPost {
   authors: string[];
   created: number;
   status: string;
-  publish_date: number;
+  publish_date: bigint;
   displayed_date: number;
   split_tested: boolean;
   subject_line: string;
@@ -38,13 +38,12 @@ export interface RawPost {
     }
   };
 }
-
 export interface Post {
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  date: string;
+  date: bigint;
   thumb_url: string;
   content: string;
   tags: string;

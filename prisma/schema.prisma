@@ -8,24 +8,24 @@ datasource db {
 }
 
 model Post {
-  id        String @id @db.VarChar(255)
-  slug      String @db.VarChar(255)
-  title     String @db.Text
-  excerpt   String @db.Text
-  date      String @db.VarChar(255)
-  thumb_url String @db.TinyText
-  content   String @db.LongText
-  tags      String @db.VarChar(255)
   audience  String @db.VarChar(20)
+  content   String @db.LongText
+  date      BigInt @db.UnsignedBigInt
+  excerpt   String @db.Text
+  slug      String @db.VarChar(100)
+  tags      String @db.VarChar(100)
+  thumb_url String @db.TinyText
+  title     String @db.Text
+  id        String @id @db.VarChar(100)
 }
 
 model Podcast {
-  id        BigInt @id @default(autoincrement())
   slug      String @db.VarChar(255)
   title     String @db.Text
   excerpt   String @db.Text
-  date      Int    @db.UnsignedInt
+  date      BigInt @db.UnsignedBigInt
   thumb_url String @db.TinyText
-  content   String @default("") @db.LongText
+  content   String @db.LongText
   audio_url String @db.VarChar(255)
+  id        BigInt @id @default(autoincrement())
 }

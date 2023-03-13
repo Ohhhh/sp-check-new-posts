@@ -1,5 +1,8 @@
+import { PrismaClient } from "@prisma/client";
 import { Post, RawIndexResponse } from "./Types";
 import { getFormatedPost } from "./utils";
+
+const prisma = new PrismaClient()
 
 const BEEHIIV_URL = process.env.BEEHIIV_URL;
 const BEEHIIV_PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID;
@@ -49,12 +52,10 @@ export const api = {
         return undefined;
       }
     },
-    getAllPosts: async (postsPerQuery = 1): Promise<Post[]> => {
+    populateDB: async (postsPerQuery = 1): Promise<void> => {
       const postsInfo = await api.posts.getPostsInfo();
       const totalPages = Math.ceil(postsInfo.totalPosts / postsPerQuery);
       let queryPage = 1;
-      let posts = [];
-      let post;
 
       // debug
       console.log({ totalPages });
@@ -62,11 +63,19 @@ export const api = {
 
       while (queryPage <= totalPages) {
         console.info("pagina " + queryPage + " of " + totalPages);
-        post = await api.posts.getPosts(postsPerQuery, queryPage);
-        if (post) posts.push(post)
+        console.info("getting posts from Beehiiv API...")
+        const posts = await api.posts.getPosts(postsPerQuery, queryPage);
+
+        console.info("reading posts from API done!")
+        posts?.map(async (post) => {
+          console.info(`creating post "${post.title}" in DB`)
+          await prisma.post.create({ data: post })
+            .then(() => console.log(`post "${post.title}" created!`))
+            .catch(err => console.error(err));
+        });
         queryPage++;
       }
-      return posts.flat().reverse();
+      // return posts.flat().reverse();
     },
     getLastPost: async (): Promise<Post> => {
       const postsInfo = await api.posts.getPostsInfo();
